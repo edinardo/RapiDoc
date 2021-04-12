@@ -19,6 +19,11 @@
           "Todo"
         ],
         "summary": "Complicated action.",
+        "x-code-samples": [{
+          "lang": "Java",
+          "syntaxLang": "java",
+          "source": "System.out.println('Hello World');"
+        }],
         "responses": {
           "200": {
             "description": "Returns a complicated class.",
@@ -29,12 +34,39 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComplicatedClass"
+                },
+                "x-ssb-errors": [
+                  {
+                    "errorCode": "01-001",
+                    "error": "General failure",
+                    "description": "An unexpected error occurred. The errorReason may contain additional details about the cause."
+                  },
+                  {
+                    "$ref": "#/components/x-ssb-errors/11-004"
+                  }
+                ]
+              }
+            }
           }
         }
       }
     }
   },
   "components": {
+    "x-ssb-errors": {
+      "11-004": {
+        "errorCode": "11-004",
+        "error": "Card locked",
+        "description": "The player's card is locked."
+      }
+    },
     "schemas": {
       "Tag": {
         "enum": [

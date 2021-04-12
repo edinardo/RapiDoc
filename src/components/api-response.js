@@ -126,6 +126,7 @@ export default class ApiResponse extends LitElement {
           examples: respExamples,
           selectedExample: respExamples[0]?.exampleId || '',
           schemaTree,
+          errors: mimeRespObj['x-ssb-errors'],
         };
       }
       // Headers for each response status
@@ -172,6 +173,7 @@ export default class ApiResponse extends LitElement {
               ? html`${this.responseHeaderListTemplate(this.headersForEachRespStatus[status])}`
               : ''
             }
+            ${this.responseErrorTemplate(this.mimeResponsesForEachStatus[status][this.selectedMimeType])}
           </div>
           ${Object.keys(this.mimeResponsesForEachStatus[status]).length === 0
             ? ''
@@ -316,6 +318,30 @@ export default class ApiResponse extends LitElement {
             schema-hide-write-only = ${this.schemaHideWriteOnly}
           > </schema-tree>`
       }`;
+  }
+
+  responseErrorTemplate(mimeRespDetails) {
+    if (mimeRespDetails && mimeRespDetails.errors) {
+      const responseErrorRows = mimeRespDetails.errors.map((v) => html`
+        <tr>
+          <td>${v.errorCode}</td>
+          <td>${v.error}</td>
+          <td>${v.description}</td>
+        </tr>
+      `);
+      return html`
+        <span class="resp-descr m-markdown">
+          <table>
+            <tr>
+              <th>errorCode</th>
+              <th>Error</th>
+              <th>Description</th>
+            </tr>
+            ${responseErrorRows}
+          </table>
+        </span>
+      `;
+    }
   }
   /* eslint-enable indent */
 }
